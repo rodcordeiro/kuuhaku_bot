@@ -1,9 +1,10 @@
 import { REST, Routes } from "discord.js"
 import { client } from "../core/client"
-import { config } from "../common/config/app.config"
+import { config } from "../common/config"
 
 
-const api = new REST().setToken(config.TOKEN)
+const api = new REST().setToken(config.app.TOKEN)
+
 export const RegisterCommands = async () => {
   try {
     const { commands } = client;
@@ -11,7 +12,7 @@ export const RegisterCommands = async () => {
       return c.data
     })
     await api.put(
-      Routes.applicationCommands(config.APP_ID),
+      Routes.applicationCommands(config.app.APP_ID),
       { body: commandData },
     );
   } catch (error) {
