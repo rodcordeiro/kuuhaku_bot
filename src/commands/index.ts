@@ -1,24 +1,25 @@
+import { Collection } from "discord.js";
+import fs from "fs";
+import { client } from "../core/client";
+import { RegisterCommands } from "./register";
+import { BaseCommand } from "../common/commands/base.command";
 
-import {Collection} from "discord.js"
-import {client} from "../core/client"
-import {RegisterCommands}from"./register"
+(async () => {
+  client.commands = new Collection();
+  const commandsDir = fs
+    .readdirSync("src/commands")
+    .filter((command) => !command.endsWith(".ts") && !command.endsWith(".js"));
 
-import PingCommand from "./ping"
-import ProfileCommand from './profile'
-
-client.commands = new Collection()
-const commands =[
-  new PingCommand(),
-  new ProfileCommand()
-]
-
-
-
-for (const command of commands) {
-   client.commands.set(command.data.name,command)
-}
-
-
-
-
-RegisterCommands()
+  const commands = await Promise.all(
+    commandsDir.map(async (commandDir) => {
+      const command: BaseCommand = await import(`./${commandDir}`).then(
+        (module) => new module.default()
+      );
+      return command;
+    })
+  );
+  commands.map((command) => {
+    client.commands.set(command.data.name, command);
+  });
+  RegisterCommands();
+})();
