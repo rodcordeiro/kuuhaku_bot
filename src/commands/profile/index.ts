@@ -7,7 +7,7 @@ export default class PingCommand {
     .setName('profile')
     .setDescription('Shows user profile!')
   async execute(interaction: ChatInputCommandInteraction) {
-    await interaction.deferReply({ content: 'Retrieving user data!', ephemeral: false });
+    await interaction.deferReply({ ephemeral: false });
     await wait(5000)
     await interaction.editReply('User profile...') 
   }

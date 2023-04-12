@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment  */
 import { Events } from "discord.js"
 
 import { client } from "../client"
 
+// @ts-ignore
 client.on(Events.InteractionCreate, async interaction => {
   if (!interaction.isChatInputCommand()) return;
 
 
-  const command = interaction.client.commands.get(interaction.commandName);
+  const command = client.commands.get(interaction.commandName);
   if (!command || !command.execute) {
     return interaction.reply("Command not found or has no execution routine!")
   }

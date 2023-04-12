@@ -8,7 +8,7 @@ const api = new REST().setToken(config.app.TOKEN)
 export const RegisterCommands = async () => {
   try {
     const { commands } = client;
-    const commandData = commands.map(c => {
+    const commandData = commands.map((c: any) => {
       return c.data
     })
     await api.put(
