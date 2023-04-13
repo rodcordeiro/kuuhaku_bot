@@ -2,6 +2,7 @@ yarn.lock
 package-lock.json
 .env
 dist/
-node_moodules
+node_modules
+
 tmp
 *.zip
