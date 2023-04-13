@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@devraelfreeze/discordjs-pagination": "^2.7.2",
     "@discordjs/builders": "^1.6.1",
     "@types/node": "^18.0.6",
     "azure-devops-node-api": "^12.0.0",

@@ -3,5 +3,5 @@ env();
 
 export const config = {
   PAT: process.env.AZURE_PAT,
-  ORG: "https://dev.azure.com/pdasolucoes",
+  ORG: "https://dev.azure.com/kodadev",
 };
