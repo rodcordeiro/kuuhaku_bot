@@ -7,9 +7,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
   const command = client.commands.get(interaction.commandName);
   if (!command || !command.autocomplete) {
-    return interaction.reply(
-      "Command not found or has no autocomplete routine!"
-    );
+    await interaction.respond([]);
   }
   try {
     await command.autocomplete(interaction);
