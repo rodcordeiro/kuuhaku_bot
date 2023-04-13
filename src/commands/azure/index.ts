@@ -1,11 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  SlashCommandBuilder,
-  ChatInputCommandInteraction,
-  EmbedBuilder,
-  Options,
-} from "discord.js";
+import { AutocompleteInteraction } from "discord.js";
+import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
 import { Pagination } from "pagination.djs";
 
 import { azure } from "../../core/azure/client.azure";
@@ -17,8 +12,25 @@ export default class AzureCommand {
     .setName("azure")
     .setDescription("Azure test command")
     .addStringOption((option) =>
-      option.setName("project").setDescription("Filters by project")
+      option
+        .setName("project")
+        .setDescription("Filters by project")
+        .setAutocomplete(true)
     );
+
+  async autocomplete(interaction: AutocompleteInteraction) {
+    const focusedValue = interaction.options.getFocused();
+    const coreClient = await azure.getCoreApi();
+    const projects = await coreClient.getProjects();
+
+    const filtered = projects.filter((project) => {
+      return project.name!.toLowerCase().includes(focusedValue);
+    });
+
+    await interaction.respond(
+      filtered.map((choice) => ({ name: choice.name!, value: choice.name! }))
+    );
+  }
 
   async execute(interaction: ChatInputCommandInteraction) {
     await interaction.deferReply({ ephemeral: false });
@@ -32,14 +44,25 @@ export default class AzureCommand {
 
       const workItems = await Promise.all(
         queryResult.workItems!.map(
-          async (workItem) => await client.getWorkItem(Number(workItem.id))
+          async (workItem) =>
+            await client.getWorkItem(Number(workItem.id), [
+              "System.AssignedTo",
+              "System.Title",
+              "System.TeamProject",
+              "System.WorkItemType",
+              "Custom.Projeto",
+            ])
         )
-      ).then((items) => items.map((item) => WorkItemModel.assing(item)));
+      ).then((items) =>
+        items.map((item) => {
+          // console.log(item);
+          return WorkItemModel.assing(item);
+        })
+      );
 
       const embeds = EmbedCards(
         projectParam
           ? (workItems.filter(
-              // @ts-ignore
               (card) =>
                 card.project.toLowerCase() === projectParam.toLowerCase()
             ) as unknown as IWorkItemModel[])

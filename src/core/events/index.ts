@@ -3,6 +3,7 @@ import { Events } from "discord.js";
 import { client } from "../client";
 
 import "./commands.event";
+import "./autoComplete.event";
 import "./privateMessage.event";
 import "./guildMessage.event";
 
