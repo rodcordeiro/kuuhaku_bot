@@ -12,14 +12,22 @@ import { BaseCommand } from "../common/commands/base.command";
 
   const commands = await Promise.all(
     commandsDir.map(async (commandDir) => {
-      const command: BaseCommand = await import(`./${commandDir}`).then(
-        (module) => new module.default()
-      );
-      return command;
+      try {
+        const command: BaseCommand = await import(
+          `./${commandDir}/${commandDir}.command`
+        ).then((module) => new module.default());
+        return command;
+      } catch (err) {
+        console.log(`Failed to import ${commandDir}`);
+      }
+    })
+  ).then((commands) =>
+    commands.filter((command) => {
+      if (command) return command;
     })
   );
   commands.map((command) => {
-    client.commands.set(command.data.name, command);
+    client.commands.set(command?.data.name, command);
   });
   RegisterCommands();
 })();
