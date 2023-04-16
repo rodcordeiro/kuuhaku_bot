@@ -1,5 +1,5 @@
 import { REST, Routes } from "discord.js";
-import { client } from "../core/client";
+import { client } from "../core/discord/client.discord";
 import { config } from "../common/config";
 
 const api = new REST().setToken(config.app.TOKEN);

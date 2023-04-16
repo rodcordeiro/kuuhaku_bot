@@ -10,6 +10,7 @@ import {
   ModalSubmitInteraction,
 } from "discord.js";
 
+import { client } from "../../core/discord/client.discord"
 import { azure } from "../../core/azure/client.azure";
 
 export default class CreateCommand {
@@ -18,15 +19,15 @@ export default class CreateCommand {
     .setDescription("Create a new task");
 
   async execute(interaction: ChatInputCommandInteraction) {
-    // await interaction.deferReply({ ephemeral: false });
-    const coreClient = await azure.getCoreApi();
-    const wiClient = await azure.getWorkItemTrackingApi();
-    const projects = await coreClient.getProjects();
-    const workItemTypes = await Promise.all(
-      projects.map(
-        async (project) => await wiClient.getWorkItemTypes(String(project.name))
-      )
-    ).then((workItemTypes) => workItemTypes);
+    // console.log("interaction")
+    // const coreClient = await azure.getCoreApi();
+    // const wiClient = await azure.getWorkItemTrackingApi();
+    // const projects = await coreClient.getProjects();
+    // const workItemTypes = await Promise.all(
+    //   projects.map(
+    //     async (project) => await wiClient.getWorkItemTypes(String(project.name))
+    //   )
+    // ).then((workItemTypes) => workItemTypes);
     const modal = new ModalBuilder()
       .setCustomId("azure_work_item_creation")
       .setTitle("Azure card creation");
@@ -50,10 +51,16 @@ export default class CreateCommand {
     // @ts-ignore
     modal.addComponents(titleActionRow, descriptionActionRow);
 
+    client.modalHandlers?.push({
+      modal: "azure_work_item_creation",
+      command: "create"
+    })
+    
     await interaction.showModal(modal);
+    
   }
 
-  async create(interaction: ModalSubmitInteraction) {
+  async modalHandler(interaction: ModalSubmitInteraction) {
     const title = interaction.fields.getTextInputValue(
       "azure_work_item_creation_title"
     );

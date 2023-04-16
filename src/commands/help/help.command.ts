@@ -4,7 +4,7 @@ import {
   EmbedBuilder,
 } from "discord.js";
 
-import { client } from "../../core/client";
+import { client } from "../../core/discord/client.discord";
 export default class HelpCommand {
   data = new SlashCommandBuilder()
     .setName("help")

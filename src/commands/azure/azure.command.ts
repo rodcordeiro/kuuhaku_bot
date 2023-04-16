@@ -7,6 +7,7 @@ import { azure } from "../../core/azure/client.azure";
 import { EmbedCards } from "./utils/embed.util";
 import { IWorkItemModel, WorkItemModel } from "./utils/WorkItem.util";
 
+
 export default class AzureCommand {
   data = new SlashCommandBuilder()
     .setName("azure")
