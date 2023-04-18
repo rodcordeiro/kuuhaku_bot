@@ -1,6 +1,12 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder,ContextMenuCommandBuilder} from "discord.js";
 
 export type BaseCommand = {
-  data: SlashCommandBuilder;
+  data: |
+  SlashCommandBuilder |
+  ContextMenuCommandBuilder
+  ;
   execute: () => Promise<void>;
+  autocomplete?: () => Promise<void>;
+  modalHandler?: () => Promise<void>;
+  [key:string]?:any;
 };

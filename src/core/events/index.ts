@@ -1,7 +1,7 @@
 import { Events } from "discord.js";
 import fs from "fs";
 import path from "path";
-import { client } from "../client";
+import { client } from "../discord/client.discord";
 
 (async () => {
   const eventsHandlers = fs

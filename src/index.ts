@@ -1,6 +1,6 @@
 import { config } from "./common/config/app.config";
 
-import { client } from "./core/client";
+import { client } from "./core/discord/client.discord";
 import "./commands";
 import "./core/events";
 import { ActivityType } from "discord.js";

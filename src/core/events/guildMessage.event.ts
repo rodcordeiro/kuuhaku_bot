@@ -1,7 +1,6 @@
 import { Events } from "discord.js";
 
-import { client } from "../client";
-
+import { client } from "../discord/client.discord";
 client.on(Events.MessageCreate, async (message) => {
   if (!message.guildId || message.interaction?.commandName) return;
   console.log("guild_message::create", message);
