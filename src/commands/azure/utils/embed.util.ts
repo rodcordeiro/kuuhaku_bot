@@ -3,16 +3,7 @@ import { IWorkItemModel } from "./WorkItem.util";
 
 const groupCards = (project: string, cards: IWorkItemModel[]) => {
   const fields: APIEmbedField[] = [];
-  // while (cards.length > 10) {
-  //   cards.splice(0, 10).map((card) =>
-  //     fields.push({
-  //       name: `#${card.id}`,
-  //       value: `[${
-  //         card.title.length > 40 ? `${card.title.slice(0, 40)}...` : card.title
-  //       }](${card.url})`,
-  //     })
-  //   );
-  // }
+
   cards.map((card) =>
     fields.push({
       name: `#${card.id}`,
