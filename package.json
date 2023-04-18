@@ -8,7 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "prebuild": "npm run format && rimraf dist",
     "build": "tsc -b .",
-    "postbuild": "discloud commit --app \"1681396759117\"",
+    "postbuild": "discloud commit",
     "format": "npm run lint && npm run prettier",
     "prettier": "prettier --ignore-path .eslintignore --write .",
     "lint": "eslint --ignore-path .eslintignore --fix --ext .ts,.tsx,.js,.jsx .",
