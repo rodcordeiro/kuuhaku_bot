@@ -5,12 +5,12 @@ import {
   EmbedBuilder,
 } from "discord.js";
 
-
 export default class InfoCommand {
   data = new ContextMenuCommandBuilder()
     .setName("User details")
-    .setDMPermission(false)  .setType(ApplicationCommandType.User);
-  
+    .setDMPermission(false)
+    .setType(ApplicationCommandType.User);
+
   async execute(interaction: UserContextMenuCommandInteraction) {
     await interaction.deferReply({ ephemeral: false });
     const user = interaction.targetUser;

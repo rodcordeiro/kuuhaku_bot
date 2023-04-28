@@ -1,15 +1,9 @@
 import { Client, GatewayIntentBits, Partials } from "discord.js";
+import { ModalHandlerIdentifier } from "src/common/interfaces/modalHandler.interface";
 
 export const client: {
   commands?: any;
-  modalHandlers?: [
-    {
-      /** Modal identifier */
-      modal: string;
-      /** Command name. Used to identify modal command handler */
-      command: string;
-    }
-  ];
+  modalHandlers?: ModalHandlerIdentifier[];
 } & Client = new Client({
   intents: [
     GatewayIntentBits.Guilds,

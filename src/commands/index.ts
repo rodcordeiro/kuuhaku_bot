@@ -3,10 +3,11 @@ import fs from "fs";
 import { client } from "../core/discord/client.discord";
 import { RegisterCommands } from "./register";
 import { BaseCommand } from "../common/commands/base.command";
+import { ModalHandlerIdentifier } from "src/common/interfaces/modalHandler.interface";
 
 (async () => {
   client.commands = new Collection();
-  client.modalHandlers =[]
+  client.modalHandlers = [] as ModalHandlerIdentifier[];
   const commandsDir = fs
     .readdirSync("src/commands")
     .filter((command) => !command.endsWith(".ts") && !command.endsWith(".js"));
@@ -20,7 +21,7 @@ import { BaseCommand } from "../common/commands/base.command";
         return command;
       } catch (err) {
         console.log(`Failed to import ${commandDir}`);
-       // console.error(err)
+        // console.error(err)
       }
     })
   ).then((commands) =>
