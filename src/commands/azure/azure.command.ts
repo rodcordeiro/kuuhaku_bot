@@ -4,6 +4,7 @@ import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
 import { Pagination } from "pagination.djs";
 
 import { azure } from "../../core/azure/client.azure";
+import { config } from "../../common/config";
 import { EmbedCards } from "./utils/embed.util";
 import { IWorkItemModel, WorkItemModel } from "./utils/WorkItem.util";
 
@@ -38,9 +39,7 @@ export default class AzureCommand {
       const projectParam = await interaction.options.getString("project");
 
       const client = await azure.getWorkItemTrackingApi();
-      const queryResult = await client.queryById(
-        "c4bcddee-ea7d-4b79-8f07-59c2fcba94fd"
-      );
+      const queryResult = await client.queryById(config.azure.QUERY_ID);
 
       const workItems = await Promise.all(
         queryResult.workItems!.map(

@@ -11,6 +11,8 @@ declare global {
       /** AZURE */
       /**  Azure Personal Acces Token */
       readonly AZURE_PAT: string;
+      /**  Azure WIQL Query id */
+      readonly QUERY_ID: string;
     }
   }
 }
