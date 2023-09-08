@@ -3,12 +3,12 @@ import { BaseEntity } from "../../common/entities/base.entity";
 
 @Entity({ name: "kb_tb_guild" })
 export class GuildEntity extends BaseEntity {
-  @Column()
-  guildId: string;
+  @Column({ type: "varchar" })
+  guildId!: string;
 
-  @Column()
+  @Column({ type: "varchar" })
   azureToken?: string;
 
-  @Column()
-  azureQueryId?: strint;
+  @Column({ type: "varchar" })
+  azureQueryId?: string;
 }
