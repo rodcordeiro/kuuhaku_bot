@@ -6,9 +6,8 @@
   "scripts": {
     "start:prod": "tsc -P . && node dist/index.js",
     "start:dev": "tsx watch src/index.ts",
-    "predeploy": "npm run format && rimraf dist",
-    "deploy": "tsc -b .",
-    "postdeploy": "discloud commit",
+    "prebuild": "npm run format && rimraf dist",
+    "build": "tsc -b .",
     "format": "npm run lint && npm run prettier",
     "prettier": "prettier --ignore-path .eslintignore --write .",
     "lint": "eslint --ignore-path .eslintignore --fix --ext .ts,.tsx,.js,.jsx .",
