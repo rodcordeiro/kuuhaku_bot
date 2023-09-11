@@ -1,4 +1,6 @@
+import { FindOneOptions } from "typeorm"
 import { GuildRepository } from "../database/repositories/guild.repository";
+import { GuildEntity } from "../database/entities/guild.entity";
 
 export class GuildServices {
   static async CreateOrUpdate(payload: { id: string }) {
@@ -14,5 +16,10 @@ export class GuildServices {
   static async Delete(payload: { id: string }) {
     const guild = await GuildRepository.findOneBy({ guildId: payload.id });
     if (guild) await GuildRepository.delete({ guildId: payload.id });
+  }
+  static async findOne(options: FindOneOptions<GuildEntity>['where']) {
+    return await GuildRepository.findOneOrFail({
+      where: options
+    })
   }
 }

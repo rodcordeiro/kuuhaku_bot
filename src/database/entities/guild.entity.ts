@@ -11,4 +11,7 @@ export class GuildEntity extends BaseEntity {
 
   @Column({ type: "varchar" })
   azureQueryId?: string;
+  
+  @Column({ type: "varchar" })
+  azureOrganization?: string;
 }

@@ -5,6 +5,7 @@ import { Pagination } from "pagination.djs";
 
 import { azure } from "../../core/azure/client.azure";
 import { config } from "../../common/config";
+import {GuildServices} from '../../services/guild.service';
 import { EmbedCards } from "./utils/embed.util";
 import { IWorkItemModel, WorkItemModel } from "./utils/WorkItem.util";
 
@@ -34,51 +35,62 @@ export default class AzureCommand {
   }
 
   async execute(interaction: ChatInputCommandInteraction) {
+    
     await interaction.deferReply({ ephemeral: false });
     try {
-      const projectParam = await interaction.options.getString("project");
+    const guild = await GuildServices.findOne({
+      guildId: interaction.guildId
+    })
+    if(!guild.azureToken){
+      await interaction.editReply("Azure PAT not provided. Please configure it first");return}
+    if(!guild.azureQueryId){
+      await interaction.editReply("Azure Query Id not provided. Please configure it first. *Important: This query must have access to view all projects, so remember to check the view all programs*");return}
+    if(!guild.azureOrganization){
+      await interaction.editReply("Azure Organization not provided. Please configure it first.");return}
+      await interaction.editReply("Command still being implemented. Be patient");return
+    //   const projectParam = await interaction.options.getString("project");
 
-      const client = await azure.getWorkItemTrackingApi();
-      const queryResult = await client.queryById(config.azure.QUERY_ID);
+    //   const client = await azure.getWorkItemTrackingApi();
+    //   const queryResult = await client.queryById(config.azure.QUERY_ID);
 
-      const workItems = await Promise.all(
-        queryResult.workItems!.map(
-          async (workItem) =>
-            await client.getWorkItem(Number(workItem.id), [
-              "System.AssignedTo",
-              "System.Title",
-              "System.TeamProject",
-              "System.WorkItemType",
-              "Custom.Projeto",
-            ])
-        )
-      ).then((items) =>
-        items.map((item) => {
-          // console.log(item);
-          return WorkItemModel.assing(item);
-        })
-      );
+    //   const workItems = await Promise.all(
+    //     queryResult.workItems!.map(
+    //       async (workItem) =>
+    //         await client.getWorkItem(Number(workItem.id), [
+    //           "System.AssignedTo",
+    //           "System.Title",
+    //           "System.TeamProject",
+    //           "System.WorkItemType",
+    //           "Custom.Projeto",
+    //         ])
+    //     )
+    //   ).then((items) =>
+    //     items.map((item) => {
+    //       // console.log(item);
+    //       return WorkItemModel.assing(item);
+    //     })
+    //   );
 
-      const embeds = EmbedCards(
-        projectParam
-          ? (workItems.filter(
-              (card) =>
-                card.project.toLowerCase() === projectParam.toLowerCase()
-            ) as unknown as IWorkItemModel[])
-          : (workItems as unknown as IWorkItemModel[])
-      );
-      const pagination = new Pagination(interaction as any, {
-        idle: 30000,
-        loop: true,
-      });
-      pagination.setEmbeds(embeds);
+    //   const embeds = EmbedCards(
+    //     projectParam
+    //       ? (workItems.filter(
+    //           (card) =>
+    //             card.project.toLowerCase() === projectParam.toLowerCase()
+    //         ) as unknown as IWorkItemModel[])
+    //       : (workItems as unknown as IWorkItemModel[])
+    //   );
+    //   const pagination = new Pagination(interaction as any, {
+    //     idle: 30000,
+    //     loop: true,
+    //   });
+    //   pagination.setEmbeds(embeds);
 
-      const payload = pagination.ready();
-      const message = await interaction.editReply(payload);
-      pagination.paginate(message);
+    //   const payload = pagination.ready();
+    //   const message = await interaction.editReply(payload);
+    //   pagination.paginate(message);
     } catch (err) {
       console.error(err);
-      await interaction.editReply("Failed to retrieve data!");
+      await interaction.editReply("Whops... Couldn't process. Try again later, please.");
     }
   }
 }
