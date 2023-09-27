@@ -3,7 +3,7 @@ import { AutocompleteInteraction } from "discord.js";
 import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
 import { Pagination } from "pagination.djs";
 
-import { azure } from "../../core/azure/client.azure";
+import { getAzureConnection } from "../../core/azure/client.azure";
 import { config } from "../../common/config";
 import { GuildServices } from "../../services/guild.service";
 import { EmbedCards } from "./utils/embed.util";
@@ -17,10 +17,24 @@ export default class AzureCommand {
       option
         .setName("project")
         .setDescription("Filters by project")
-        .setAutocomplete(true),
+        .setAutocomplete(true)
     );
 
   async autocomplete(interaction: AutocompleteInteraction) {
+    const guild = await GuildServices.findOne({
+      guildId: interaction.guildId!,
+    });
+    if (!guild.azureToken || !guild.azureOrganization) {
+      return await interaction.respond([]);
+    }
+
+    const azure = getAzureConnection({
+      ORG: guild.azureOrganization,
+      PAT: JSON.parse(
+        Buffer.from(guild.azureToken, "base64").toString("utf-8")
+      ),
+    });
+
     const focusedValue = interaction.options.getFocused();
     const coreClient = await azure.getCoreApi();
     const projects = await coreClient.getProjects();
@@ -30,7 +44,7 @@ export default class AzureCommand {
     });
 
     await interaction.respond(
-      filtered.map((choice) => ({ name: choice.name!, value: choice.name! })),
+      filtered.map((choice) => ({ name: choice.name!, value: choice.name! }))
     );
   }
 
@@ -38,35 +52,48 @@ export default class AzureCommand {
     await interaction.deferReply({ ephemeral: false });
     try {
       const guild = await GuildServices.findOne({
-        guildId: interaction.guildId,
+        guildId: interaction.guildId!,
       });
       if (!guild.azureToken) {
         await interaction.editReply(
-          "Azure PAT not provided. Please configure it first",
+          "Azure PAT not provided. Please configure it first"
         );
         return;
       }
       if (!guild.azureQueryId) {
         await interaction.editReply(
-          "Azure Query Id not provided. Please configure it first. *Important: This query must have access to view all projects, so remember to check the view all programs*",
+          "Azure Query Id not provided. Please configure it first. *Important: This query must have access to view all projects, so remember to check the view all programs*"
         );
         return;
       }
       if (!guild.azureOrganization) {
         await interaction.editReply(
-          "Azure Organization not provided. Please configure it first.",
+          "Azure Organization not provided. Please configure it first."
         );
         return;
       }
+
+      const azure = getAzureConnection({
+        ORG: guild.azureOrganization,
+        PAT: JSON.parse(
+          Buffer.from(guild.azureToken, "base64").toString("utf-8")
+        ),
+      });
+
+      // console.log(client);
+      // await interaction.editReply(
+      //   "Command still being implemented. Be patient"
+      // );
+
+      const projectParam = await interaction.options.getString("project");
+
+      const client = await azure.getWorkItemTrackingApi();
+      const queryResult = await client.queryById(config.azure.QUERY_ID);
+
+      console.debug("[queryResult]", queryResult);
       await interaction.editReply(
-        "Command still being implemented. Be patient",
+        "Command still being implemented. Be patient"
       );
-      return;
-      //   const projectParam = await interaction.options.getString("project");
-
-      //   const client = await azure.getWorkItemTrackingApi();
-      //   const queryResult = await client.queryById(config.azure.QUERY_ID);
-
       //   const workItems = await Promise.all(
       //     queryResult.workItems!.map(
       //       async (workItem) =>
@@ -105,7 +132,7 @@ export default class AzureCommand {
     } catch (err) {
       console.error(err);
       await interaction.editReply(
-        "Whops... Couldn't process. Try again later, please.",
+        "Whops... Couldn't process. Try again later, please."
       );
     }
   }

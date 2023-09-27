@@ -22,4 +22,11 @@ export class GuildServices {
       where: options,
     });
   }
+  static async update(payload: GuildEntity) {
+    const guild = await GuildRepository.findOneByOrFail({
+      guildId: payload.guildId,
+    });
+    GuildRepository.merge(guild, payload);
+    return await GuildRepository.save(guild);
+  }
 }
