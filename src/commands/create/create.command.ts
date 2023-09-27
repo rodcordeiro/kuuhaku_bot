@@ -26,20 +26,20 @@ export default class CreateCommand {
         .setName("project")
         .setDescription("Project to attribute")
         .setRequired(true)
-        .setAutocomplete(true)
+        .setAutocomplete(true),
     )
     .addStringOption((option) =>
       option
         .setName("item")
         .setDescription("Work Item type")
         .setRequired(true)
-        .setAutocomplete(true)
+        .setAutocomplete(true),
     )
     .addStringOption((option) =>
-      option.setName("title").setDescription("Card Title").setRequired(true)
+      option.setName("title").setDescription("Card Title").setRequired(true),
     )
     .addBooleanOption((option) =>
-      option.setName("description").setDescription("Add card description")
+      option.setName("description").setDescription("Add card description"),
     );
 
   async autocomplete(interaction: AutocompleteInteraction) {
@@ -68,13 +68,13 @@ export default class CreateCommand {
       filtered.map((choice) => ({
         name: String(choice.name),
         value: String(choice.name),
-      }))
+      })),
     );
   }
   async execute(interaction: ChatInputCommandInteraction) {
     if (
       interaction.options.data.find(
-        (option) => option.name === "description" && option.value === true
+        (option) => option.name === "description" && option.value === true,
       )
     ) {
       const modal = new ModalBuilder()
@@ -104,7 +104,7 @@ export default class CreateCommand {
 
       const titleActionRow = new ActionRowBuilder().addComponents(cardTitle);
       const descriptionActionRow = new ActionRowBuilder().addComponents(
-        cardDescription
+        cardDescription,
       );
       const projectRow = new ActionRowBuilder().addComponents(cardProject);
       const typeRow = new ActionRowBuilder().addComponents(cardType);
@@ -114,7 +114,7 @@ export default class CreateCommand {
         titleActionRow,
         descriptionActionRow,
         projectRow,
-        typeRow
+        typeRow,
       );
 
       client.modalHandlers?.push({
@@ -141,16 +141,16 @@ export default class CreateCommand {
 
   async modalHandler(interaction: ModalSubmitInteraction) {
     const title = interaction.fields.getTextInputValue(
-      "azure_work_item_creation_title"
+      "azure_work_item_creation_title",
     );
     const description = interaction.fields.getTextInputValue(
-      "azure_work_item_creation_description"
+      "azure_work_item_creation_description",
     );
     const project = interaction.fields.getTextInputValue(
-      "azure_work_item_creation_project"
+      "azure_work_item_creation_project",
     );
     const type = interaction.fields.getTextInputValue(
-      "azure_work_item_creation_type"
+      "azure_work_item_creation_type",
     );
     await interaction.reply({
       content: "Creating card... this may take a while.",
@@ -209,14 +209,14 @@ export default class CreateCommand {
           },
         ],
         payload.project,
-        payload.type
+        payload.type,
       )
       .then(async (workItem) => {
         const WorkItemIcon = await wiClient
           .getWorkItemTypeColorAndIcons([payload.project])
           .then(async (data) => {
             const type = data[0].value.find(
-              (icon) => icon.workItemTypeName === payload.type
+              (icon) => icon.workItemTypeName === payload.type,
             );
             const icon = await (
               await wiClient.getWorkItemIconJson(String(type?.icon))
@@ -232,7 +232,7 @@ export default class CreateCommand {
           .setTitle(`Card Created: #${workItem.id}`)
           .setColor(
             (String(WorkItemIcon.color) as unknown as ColorResolvable) ||
-              Colors.Aqua
+              Colors.Aqua,
           )
           .addFields([
             {
@@ -247,7 +247,7 @@ export default class CreateCommand {
           })
           .setThumbnail(
             WorkItemIcon.icon ||
-              "https://rodcordeiro.github.io/shares/img/product_backlog_item.png"
+              "https://rodcordeiro.github.io/shares/img/product_backlog_item.png",
           );
         await payload.interaction.editReply({
           embeds: [embed],

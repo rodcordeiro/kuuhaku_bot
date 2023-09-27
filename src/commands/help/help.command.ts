@@ -19,7 +19,7 @@ export default class HelpCommand {
     const embed = new EmbedBuilder()
       .setTitle("Command list:")
       .setDescription(
-        "_Commands without description could be context commands. Tried my best to maintain self-describing_"
+        "_Commands without description could be context commands. Tried my best to maintain self-describing_",
       )
       .setFields(commandData)
       .setAuthor({

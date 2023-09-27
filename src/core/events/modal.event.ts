@@ -8,7 +8,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
   try {
     const handler = client.modalHandlers?.find(
-      (handler) => handler.modal === interaction.customId
+      (handler) => handler.modal === interaction.customId,
     );
     if (handler) {
       const command = client.commands.get(handler?.command);

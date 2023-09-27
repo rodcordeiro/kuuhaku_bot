@@ -10,14 +10,14 @@ const groupCards = (project: string, cards: IWorkItemModel[]) => {
       value: `[${
         card.title.length > 40 ? `${card.title.slice(0, 40)}...` : card.title
       }](${card.url})`,
-    })
+    }),
   );
   return fields;
 };
 
 const cardsPerProject = (
   project: string,
-  cards: IWorkItemModel[]
+  cards: IWorkItemModel[],
 ): APIEmbedField[] => {
   const workitems = cards.filter((value) => value.project === project);
   return groupCards(project, workitems);
@@ -38,7 +38,7 @@ export const EmbedCards = (cards: IWorkItemModel[]) => {
           "https://rodcordeiro.github.io/shares/img/shiro_nogamenolife.jpg",
       })
       .setThumbnail(
-        "https://rodcordeiro.github.io/shares/img/product_backlog_item.png"
+        "https://rodcordeiro.github.io/shares/img/product_backlog_item.png",
       )
       .addFields(cardsPerProject(project, cards))
       .addFields({ name: "\u200B", value: "\u200B" });

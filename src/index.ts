@@ -9,20 +9,26 @@ import { AppDataSource } from "./database";
 
 AppDataSource.initialize().then(() =>
   client.login(config.TOKEN).then(() => {
-    setInterval(() => {
-      const timer = setTimeout(() => {
-        client.user?.setActivity("with some goblins...");
-        clearTimeout(timer);
-      }, 2 * (60 * 1000));
-      client.user?.setPresence({
-        status: "online",
-        activities: [
-          {
-            name: "/help",
-            type: ActivityType.Listening,
+    setInterval(
+      () => {
+        const timer = setTimeout(
+          () => {
+            client.user?.setActivity("with some goblins...");
+            clearTimeout(timer);
           },
-        ],
-      });
-    }, 10 * (60 * 1000));
-  })
+          2 * (60 * 1000),
+        );
+        client.user?.setPresence({
+          status: "online",
+          activities: [
+            {
+              name: "/help",
+              type: ActivityType.Listening,
+            },
+          ],
+        });
+      },
+      10 * (60 * 1000),
+    );
+  }),
 );

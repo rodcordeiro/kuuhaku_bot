@@ -23,11 +23,11 @@ import { ModalHandlerIdentifier } from "src/common/interfaces/modalHandler.inter
         console.log(`Failed to import ${commandDir}`);
         // console.error(err)
       }
-    })
+    }),
   ).then((commands) =>
     commands.filter((command) => {
       if (command) return command;
-    })
+    }),
   );
   commands.map((command) => {
     client.commands.set(command?.data.name, command);
