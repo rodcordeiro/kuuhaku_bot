@@ -24,7 +24,7 @@
     "mysql": "^2.18.1",
     "node-fetch": "^3.2.6",
     "pagination.djs": "^4.0.9",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.2.0",
     "src": "^1.1.2",
     "typeorm": "^0.3.17",
     "uuid": "^9.0.0"
