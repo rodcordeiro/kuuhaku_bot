@@ -4,6 +4,6 @@ WORKDIR /vault
 
 COPY . .
 
-RUN yarn && yarn build
+RUN npm i && npm i run build
 
-CMD [ "yarn", "start:dev" ]
+CMD [ "npm", "run start:dev" ]
