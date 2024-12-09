@@ -4,6 +4,6 @@ WORKDIR /vault
 
 COPY . .
 
-RUN npm i && npm i run build
+RUN npm i && npm run build
 
-CMD [ "npm", "start:dev" ]
+CMD [ "node","dist/index.js" ]
