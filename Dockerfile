@@ -6,4 +6,4 @@ COPY . .
 
 RUN npm i && npm i run build
 
-CMD [ "npm", "run start:dev" ]
+CMD [ "npm", "start:dev" ]
