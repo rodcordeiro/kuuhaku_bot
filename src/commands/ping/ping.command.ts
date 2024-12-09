@@ -1,10 +1,10 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 
 export default class PingCommand {
   data = new SlashCommandBuilder()
-    .setName("ping")
-    .setDescription("Replies with Pong!");
+    .setName('ping')
+    .setDescription('Replies with Pong!');
   async execute(interaction: ChatInputCommandInteraction) {
-    await interaction.reply({ content: "Pong!", ephemeral: true });
+    await interaction.reply({ content: 'Pong!', ephemeral: true });
   }
 }

@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  kuuhaku_bot:
+    image: rodcordeiro/kuuhaku-bot:latest
+    container_name: kuuhaku
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - bots
+    logging:
+      driver: 'json-file' # You can choose a different driver if needed
+      options:
+        max-size: '5m' # Maximum size of a single log file
+        max-file: '1' # Maximum number of log files to retain
+
+networks:
+  bots:
+    name: bots_network
+    external: true

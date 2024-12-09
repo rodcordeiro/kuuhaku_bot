@@ -1,45 +1,45 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
-  SlashCommandBuilder,
-  ChatInputCommandInteraction,
-  ModalBuilder,
-  TextInputBuilder,
-  TextInputStyle,
   ActionRowBuilder,
-  ModalSubmitInteraction,
   AutocompleteInteraction,
-  EmbedBuilder,
+  ChatInputCommandInteraction,
   ColorResolvable,
   Colors,
-} from "discord.js";
+  EmbedBuilder,
+  ModalBuilder,
+  ModalSubmitInteraction,
+  SlashCommandBuilder,
+  TextInputBuilder,
+  TextInputStyle,
+} from 'discord.js';
 
-import { client } from "../../core/discord/client.discord";
-import { azure } from "../../core/azure/client.azure";
+import { azure } from '../../core/azure/client.azure';
+import { client } from '../../core/discord/client.discord';
 
 export default class CreateCommand {
   data = new SlashCommandBuilder()
-    .setName("create")
-    .setDescription("Create a new task")
-    .addStringOption((option) =>
+    .setName('create')
+    .setDescription('Create a new task')
+    .addStringOption(option =>
       option
-        .setName("project")
-        .setDescription("Project to attribute")
+        .setName('project')
+        .setDescription('Project to attribute')
         .setRequired(true)
-        .setAutocomplete(true)
+        .setAutocomplete(true),
     )
-    .addStringOption((option) =>
+    .addStringOption(option =>
       option
-        .setName("item")
-        .setDescription("Work Item type")
+        .setName('item')
+        .setDescription('Work Item type')
         .setRequired(true)
-        .setAutocomplete(true)
+        .setAutocomplete(true),
     )
-    .addStringOption((option) =>
-      option.setName("title").setDescription("Card Title").setRequired(true)
+    .addStringOption(option =>
+      option.setName('title').setDescription('Card Title').setRequired(true),
     )
-    .addBooleanOption((option) =>
-      option.setName("description").setDescription("Add card description")
+    .addBooleanOption(option =>
+      option.setName('description').setDescription('Add card description'),
     );
 
   async autocomplete(interaction: AutocompleteInteraction) {
@@ -48,63 +48,63 @@ export default class CreateCommand {
     const projects = await coreClient.getProjects();
     let filtered: Array<{ [k: string]: any }> = [];
 
-    if (focusedValue.name === "project") {
-      filtered = projects.filter((project) => {
+    if (focusedValue.name === 'project') {
+      filtered = projects.filter(project => {
         return project.name?.toLowerCase().includes(focusedValue.value);
       });
     }
 
-    if (focusedValue.name === "item") {
+    if (focusedValue.name === 'item') {
       const wiClient = await azure.getWorkItemTrackingApi();
-      const project = interaction.options.getString("project");
+      const project = interaction.options.getString('project');
 
       const workItemTypes = await wiClient
         .getWorkItemTypes(String(project))
-        .then((workItemTypes) => workItemTypes);
+        .then(workItemTypes => workItemTypes);
       filtered = workItemTypes;
     }
 
     await interaction.respond(
-      filtered.map((choice) => ({
+      filtered.map(choice => ({
         name: String(choice.name),
         value: String(choice.name),
-      }))
+      })),
     );
   }
   async execute(interaction: ChatInputCommandInteraction) {
     if (
       interaction.options.data.find(
-        (option) => option.name === "description" && option.value === true
+        option => option.name === 'description' && option.value === true,
       )
     ) {
       const modal = new ModalBuilder()
-        .setCustomId("azure_work_item_creation")
-        .setTitle("Azure card creation");
+        .setCustomId('azure_work_item_creation')
+        .setTitle('Azure card creation');
 
       const cardTitle = new TextInputBuilder()
-        .setCustomId("azure_work_item_creation_title")
-        .setLabel("Card title:")
+        .setCustomId('azure_work_item_creation_title')
+        .setLabel('Card title:')
         .setStyle(TextInputStyle.Short)
-        .setValue(interaction.options.getString("title") || "");
+        .setValue(interaction.options.getString('title') || '');
       const cardDescription = new TextInputBuilder()
-        .setCustomId("azure_work_item_creation_description")
-        .setLabel("Describe the card:")
+        .setCustomId('azure_work_item_creation_description')
+        .setLabel('Describe the card:')
         .setStyle(TextInputStyle.Paragraph)
         .setRequired(false);
       const cardProject = new TextInputBuilder()
-        .setCustomId("azure_work_item_creation_project")
-        .setLabel("Project:")
+        .setCustomId('azure_work_item_creation_project')
+        .setLabel('Project:')
         .setStyle(TextInputStyle.Short)
-        .setValue(String(interaction.options.getString("project")));
+        .setValue(String(interaction.options.getString('project')));
       const cardType = new TextInputBuilder()
-        .setCustomId("azure_work_item_creation_type")
-        .setLabel("Work Item Type:")
+        .setCustomId('azure_work_item_creation_type')
+        .setLabel('Work Item Type:')
         .setStyle(TextInputStyle.Short)
-        .setValue(String(interaction.options.getString("item")));
+        .setValue(String(interaction.options.getString('item')));
 
       const titleActionRow = new ActionRowBuilder().addComponents(cardTitle);
       const descriptionActionRow = new ActionRowBuilder().addComponents(
-        cardDescription
+        cardDescription,
       );
       const projectRow = new ActionRowBuilder().addComponents(cardProject);
       const typeRow = new ActionRowBuilder().addComponents(cardType);
@@ -114,22 +114,22 @@ export default class CreateCommand {
         titleActionRow,
         descriptionActionRow,
         projectRow,
-        typeRow
+        typeRow,
       );
 
       client.modalHandlers?.push({
-        modal: "azure_work_item_creation",
-        command: "create",
+        modal: 'azure_work_item_creation',
+        command: 'create',
       });
 
       return await interaction.showModal(modal);
     }
 
-    const project = String(interaction.options.getString("project"));
-    const item = String(interaction.options.getString("item"));
-    const title = String(interaction.options.getString("title"));
+    const project = String(interaction.options.getString('project'));
+    const item = String(interaction.options.getString('item'));
+    const title = String(interaction.options.getString('title'));
     await interaction.reply({
-      content: "Creating card... this may take a while.",
+      content: 'Creating card... this may take a while.',
     });
     await this.createCard({
       title,
@@ -141,19 +141,19 @@ export default class CreateCommand {
 
   async modalHandler(interaction: ModalSubmitInteraction) {
     const title = interaction.fields.getTextInputValue(
-      "azure_work_item_creation_title"
+      'azure_work_item_creation_title',
     );
     const description = interaction.fields.getTextInputValue(
-      "azure_work_item_creation_description"
+      'azure_work_item_creation_description',
     );
     const project = interaction.fields.getTextInputValue(
-      "azure_work_item_creation_project"
+      'azure_work_item_creation_project',
     );
     const type = interaction.fields.getTextInputValue(
-      "azure_work_item_creation_type"
+      'azure_work_item_creation_type',
     );
     await interaction.reply({
-      content: "Creating card... this may take a while.",
+      content: 'Creating card... this may take a while.',
     });
     await this.createCard({
       title,
@@ -178,45 +178,45 @@ export default class CreateCommand {
         undefined,
         [
           {
-            op: "add",
-            path: "/fields/System.Title",
+            op: 'add',
+            path: '/fields/System.Title',
             value: payload.title,
           },
           {
-            op: "add",
-            path: "/fields/System.Description",
+            op: 'add',
+            path: '/fields/System.Description',
             value: `<div>${payload.description}</div>`,
           },
           {
-            op: "add",
-            path: "/fields/System.TeamProject",
+            op: 'add',
+            path: '/fields/System.TeamProject',
             value: payload.project,
           },
           {
-            op: "add",
-            path: "/fields/System.WorkItemType",
+            op: 'add',
+            path: '/fields/System.WorkItemType',
             value: payload.type,
           },
           {
-            op: "add",
-            path: "/fields/Microsoft.VSTS.Common.Priority",
-            value: "1",
+            op: 'add',
+            path: '/fields/Microsoft.VSTS.Common.Priority',
+            value: '1',
           },
           {
-            op: "add",
-            path: "/fields/Custom.Projeto",
-            value: "Koda.dev",
+            op: 'add',
+            path: '/fields/Custom.Projeto',
+            value: 'Koda.dev',
           },
         ],
         payload.project,
-        payload.type
+        payload.type,
       )
-      .then(async (workItem) => {
+      .then(async workItem => {
         const WorkItemIcon = await wiClient
           .getWorkItemTypeColorAndIcons([payload.project])
-          .then(async (data) => {
+          .then(async data => {
             const type = data[0].value.find(
-              (icon) => icon.workItemTypeName === payload.type
+              icon => icon.workItemTypeName === payload.type,
             );
             const icon = await (
               await wiClient.getWorkItemIconJson(String(type?.icon))
@@ -232,33 +232,33 @@ export default class CreateCommand {
           .setTitle(`Card Created: #${workItem.id}`)
           .setColor(
             (String(WorkItemIcon.color) as unknown as ColorResolvable) ||
-              Colors.Aqua
+              Colors.Aqua,
           )
           .addFields([
             {
-              name: "title",
-              value: `[${payload.title}](${workItem._links.html.href || "#"})`,
+              name: 'title',
+              value: `[${payload.title}](${workItem._links.html.href || '#'})`,
             },
           ])
           .setAuthor({
-            name: "<Kuuhaku />",
+            name: '<Kuuhaku />',
             iconURL:
-              "https://rodcordeiro.github.io/shares/img/shiro_nogamenolife.jpg",
+              'https://rodcordeiro.github.io/shares/img/shiro_nogamenolife.jpg',
           })
           .setThumbnail(
             WorkItemIcon.icon ||
-              "https://rodcordeiro.github.io/shares/img/product_backlog_item.png"
+              'https://rodcordeiro.github.io/shares/img/product_backlog_item.png',
           );
         await payload.interaction.editReply({
           embeds: [embed],
-          content: "Card created!",
+          content: 'Card created!',
         });
       })
-      .catch(async (err) => {
-        console.error("err", err);
+      .catch(async err => {
+        console.error('err', err);
         await payload.interaction.editReply({
           content:
-            "Some issues ocurred while creating the card. Please try again later.",
+            'Some issues ocurred while creating the card. Please try again later.',
         });
       });
   }

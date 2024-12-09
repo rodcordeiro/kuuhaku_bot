@@ -1,31 +1,32 @@
 import {
-  SlashCommandBuilder,
   ChatInputCommandInteraction,
   EmbedBuilder,
-} from "discord.js";
+  SlashCommandBuilder,
+} from 'discord.js';
 
-import { client } from "../../core/discord/client.discord";
+import { client } from '../../core/discord/client.discord';
 export default class HelpCommand {
   data = new SlashCommandBuilder()
-    .setName("help")
-    .setDescription("Shows bot help!");
+    .setName('help')
+    .setDescription('Shows bot help!');
   async execute(interaction: ChatInputCommandInteraction) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const commandData = client.commands.map((c: any) => {
       return {
         name: c.data.name,
-        value: c.data.description || "\u200B",
+        value: c.data.description || '\u200B',
       };
     });
     const embed = new EmbedBuilder()
-      .setTitle("Command list:")
+      .setTitle('Command list:')
       .setDescription(
-        "_Commands without description could be context commands. Tried my best to maintain self-describing_"
+        '_Commands without description could be context commands. Tried my best to maintain self-describing_',
       )
       .setFields(commandData)
       .setAuthor({
-        name: "<Kuuhaku />",
+        name: '<Kuuhaku />',
         iconURL:
-          "https://rodcordeiro.github.io/shares/img/shiro_nogamenolife.jpg",
+          'https://rodcordeiro.github.io/shares/img/shiro_nogamenolife.jpg',
       });
     await interaction.reply({ embeds: [embed], ephemeral: true });
   }

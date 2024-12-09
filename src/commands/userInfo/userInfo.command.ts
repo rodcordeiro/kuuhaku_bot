@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  ContextMenuCommandBuilder,
   ApplicationCommandType,
-  UserContextMenuCommandInteraction,
+  ContextMenuCommandBuilder,
   EmbedBuilder,
-} from "discord.js";
+  UserContextMenuCommandInteraction,
+} from 'discord.js';
 
 export default class InfoCommand {
   data = new ContextMenuCommandBuilder()
-    .setName("User details")
+    .setName('User details')
     .setDMPermission(false)
-    .setType(ApplicationCommandType.User);
+    .setType(ApplicationCommandType.User as any);
 
   async execute(interaction: UserContextMenuCommandInteraction) {
     await interaction.deferReply({ ephemeral: false });
@@ -18,12 +19,12 @@ export default class InfoCommand {
       .setTitle(`${user.username} Info:`)
       .setFields([
         {
-          name: "Username",
+          name: 'Username',
           value: `_${user.tag}_`,
           inline: true,
         },
         {
-          name: "ID",
+          name: 'ID',
           value: `\`#${user.id}\``,
           inline: true,
         },

@@ -8,8 +8,8 @@
     "start:dev": "tsx watch src/index.ts",
     "prebuild": "npm run format && rimraf dist",
     "build": "tsc -b .",
-    "format": "npm run lint && npm run prettier",
-    "prettier": "prettier --ignore-path .eslintignore --write .",
+    "format": "npm run lint && npm run pretty",
+    "pretty": "prettier --ignore-path .eslintignore --write .",
     "lint": "eslint --ignore-path .eslintignore --fix --ext .ts,.tsx,.js,.jsx .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,24 +18,25 @@
   "license": "MIT",
   "dependencies": {
     "@discordjs/builders": "^1.6.1",
-    "azure-devops-node-api": "^12.0.0",
+    "azure-devops-node-api": "^14.0.0",
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
     "mysql": "^2.18.1",
     "node-fetch": "^3.2.6",
     "pagination.djs": "^4.0.9",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.2.0",
+    "src": "^1.1.2",
     "typeorm": "^0.3.17",
-    "uuid": "^9.0.0"
+    "uuid": "^11.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.4.5",
-    "@typescript-eslint/eslint-plugin": "^6.2.0",
-    "@typescript-eslint/parser": "^6.13.1",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "eslint": "^8.38.0",
-    "prettier": "^3.0.0",
-    "rimraf": "^5.0.0",
-    "tsx": "^4.6.2",
+    "prettier": "^3.4.2",
+    "rimraf": "^6.0.0",
+    "tsx": "^4.0.0",
     "typescript": "^5.0.4"
   }
 }
