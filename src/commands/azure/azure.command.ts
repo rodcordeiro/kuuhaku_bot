@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { AutocompleteInteraction } from "discord.js";
-import { SlashCommandBuilder, ChatInputCommandInteraction } from "discord.js";
-import { Pagination } from "pagination.djs";
+import {
+  AutocompleteInteraction,
+  ChatInputCommandInteraction,
+  SlashCommandBuilder,
+} from 'discord.js';
 
-import { getAzureConnection } from "../../core/azure/client.azure";
-import { config } from "../../common/config";
-import { GuildServices } from "../../services/guild.service";
-import { EmbedCards } from "./utils/embed.util";
-import { IWorkItemModel, WorkItemModel } from "./utils/WorkItem.util";
+import { config } from '../../common/config';
+import { getAzureConnection } from '../../core/azure/client.azure';
+import { GuildServices } from '../../services/guild.service';
 
 export default class AzureCommand {
   data = new SlashCommandBuilder()
-    .setName("azure")
-    .setDescription("Azure test command")
-    .addStringOption((option) =>
+    .setName('azure')
+    .setDescription('Azure test command')
+    .addStringOption(option =>
       option
-        .setName("project")
-        .setDescription("Filters by project")
-        .setAutocomplete(true)
+        .setName('project')
+        .setDescription('Filters by project')
+        .setAutocomplete(true),
     );
 
   async autocomplete(interaction: AutocompleteInteraction) {
@@ -31,7 +31,7 @@ export default class AzureCommand {
     const azure = getAzureConnection({
       ORG: guild.azureOrganization,
       PAT: JSON.parse(
-        Buffer.from(guild.azureToken, "base64").toString("utf-8")
+        Buffer.from(guild.azureToken, 'base64').toString('utf-8'),
       ),
     });
 
@@ -39,12 +39,12 @@ export default class AzureCommand {
     const coreClient = await azure.getCoreApi();
     const projects = await coreClient.getProjects();
 
-    const filtered = projects.filter((project) => {
+    const filtered = projects.filter(project => {
       return project.name!.toLowerCase().includes(focusedValue);
     });
 
     await interaction.respond(
-      filtered.map((choice) => ({ name: choice.name!, value: choice.name! }))
+      filtered.map(choice => ({ name: choice.name!, value: choice.name! })),
     );
   }
 
@@ -56,19 +56,19 @@ export default class AzureCommand {
       });
       if (!guild.azureToken) {
         await interaction.editReply(
-          "Azure PAT not provided. Please configure it first"
+          'Azure PAT not provided. Please configure it first',
         );
         return;
       }
       if (!guild.azureQueryId) {
         await interaction.editReply(
-          "Azure Query Id not provided. Please configure it first. *Important: This query must have access to view all projects, so remember to check the view all programs*"
+          'Azure Query Id not provided. Please configure it first. *Important: This query must have access to view all projects, so remember to check the view all programs*',
         );
         return;
       }
       if (!guild.azureOrganization) {
         await interaction.editReply(
-          "Azure Organization not provided. Please configure it first."
+          'Azure Organization not provided. Please configure it first.',
         );
         return;
       }
@@ -76,7 +76,7 @@ export default class AzureCommand {
       const azure = getAzureConnection({
         ORG: guild.azureOrganization,
         PAT: JSON.parse(
-          Buffer.from(guild.azureToken, "base64").toString("utf-8")
+          Buffer.from(guild.azureToken, 'base64').toString('utf-8'),
         ),
       });
 
@@ -85,14 +85,14 @@ export default class AzureCommand {
       //   "Command still being implemented. Be patient"
       // );
 
-      const projectParam = await interaction.options.getString("project");
+      // const projectParam = await interaction.options.getString("project");
 
       const client = await azure.getWorkItemTrackingApi();
       const queryResult = await client.queryById(config.azure.QUERY_ID);
 
-      console.debug("[queryResult]", queryResult);
+      console.debug('[queryResult]', queryResult);
       await interaction.editReply(
-        "Command still being implemented. Be patient"
+        'Command still being implemented. Be patient',
       );
       //   const workItems = await Promise.all(
       //     queryResult.workItems!.map(
@@ -132,7 +132,7 @@ export default class AzureCommand {
     } catch (err) {
       console.error(err);
       await interaction.editReply(
-        "Whops... Couldn't process. Try again later, please."
+        "Whops... Couldn't process. Try again later, please.",
       );
     }
   }

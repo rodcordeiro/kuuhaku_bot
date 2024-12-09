@@ -1,4 +1,4 @@
-import { WorkItem } from "azure-devops-node-api/interfaces/WorkItemTrackingInterfaces";
+import { WorkItem } from 'azure-devops-node-api/interfaces/WorkItemTrackingInterfaces';
 
 export type IWorkItemModel = {
   title: string;
@@ -10,11 +10,11 @@ export type IWorkItemModel = {
 export class WorkItemModel {
   static assing(card: WorkItem): IWorkItemModel {
     return {
-      title: card.fields?.["System.Title"],
+      title: card.fields?.['System.Title'],
       id: Number(card.id),
-      project: card.fields?.["System.TeamProject"],
-      subproject: card.fields?.["Custom.Projeto"],
-      url: card._links ? card._links.html.href : "#",
+      project: card.fields?.['System.TeamProject'],
+      subproject: card.fields?.['Custom.Projeto'],
+      url: card._links ? card._links.html.href : '#',
     };
   }
 }

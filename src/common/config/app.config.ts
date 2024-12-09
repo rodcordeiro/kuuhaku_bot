@@ -1,4 +1,4 @@
-import { config as env } from "dotenv";
+import { config as env } from 'dotenv';
 env();
 
 export const config = {

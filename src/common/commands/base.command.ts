@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ContextMenuCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, ContextMenuCommandBuilder } from 'discord.js';
 
 export type BaseCommand = {
   data: SlashCommandBuilder | ContextMenuCommandBuilder;

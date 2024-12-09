@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment  */
-import { Events } from "discord.js";
+import { Events } from 'discord.js';
 
-import { client } from "../discord/client.discord";
+import { client } from '../discord/client.discord';
 
-client.on(Events.InteractionCreate, async (interaction) => {
+client.on(Events.InteractionCreate, async interaction => {
   if (!interaction.isModalSubmit()) return;
 
   try {
     const handler = client.modalHandlers?.find(
-      (handler) => handler.modal === interaction.customId,
+      handler => handler.modal === interaction.customId,
     );
     if (handler) {
       const command = client.commands.get(handler?.command);
@@ -16,10 +16,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
         await command.modalHandler(interaction);
       }
     } else {
-      await interaction.reply("Modal handler not implemented.");
+      await interaction.reply('Modal handler not implemented.');
     }
   } catch (err) {
     console.error(err);
-    await interaction.reply("Modal handler not implemented.");
+    await interaction.reply('Modal handler not implemented.');
   }
 });
