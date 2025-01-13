@@ -27,7 +27,7 @@
     "reflect-metadata": "^0.2.0",
     "src": "^1.1.2",
     "typeorm": "^0.3.17",
-    "uuid": "^11.0.0"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
