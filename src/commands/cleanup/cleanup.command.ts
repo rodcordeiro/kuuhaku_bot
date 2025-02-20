@@ -31,8 +31,9 @@ export default class CleanupCommand {
         .catch((err) => {
           throw err;
         });
+      console.log({messages});
       await interaction.reply({
-        content: `${messages?.length} messages included for deleting. Processing it all.`,
+        content: ` messages included for deleting. Processing it all.`,
       }),
         await Promise.all(messages!.promises);
     } catch (e) {
