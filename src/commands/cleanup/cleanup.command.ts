@@ -32,7 +32,7 @@ export default class CleanupCommand {
           throw err;
         });
       await interaction.reply({
-        content: `${messages?.len} messages included for deleting. Processing it all.`,
+        content: `${messages?.length} messages included for deleting. Processing it all.`,
       }),
         await Promise.all(messages!.promises);
     } catch (e) {
